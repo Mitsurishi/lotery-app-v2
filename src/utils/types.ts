@@ -2,8 +2,8 @@
 interface SelectedNumber {
     firstField: Field
     secondField: Field
-
 }
+
 export type Field = number[];
 
 export type GameState = "inProgress" | "win" | "lose";
