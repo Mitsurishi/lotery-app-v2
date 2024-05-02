@@ -7,7 +7,12 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import styles from './styles.module.scss';
-import { Field, GameState, LoadingState, ResultRequestData } from '../utils/types';
+import {
+  Field,
+  GameState,
+  LoadingState,
+  ResultRequestData,
+} from '../utils/types';
 import {
   FIRST_FIELD_CHIP_COUNT,
   FIRST_FIELD_CHIP_REQUIRE,

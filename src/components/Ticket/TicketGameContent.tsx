@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import {
     Button,
     Divider,
@@ -8,7 +8,7 @@ import {
 import TicketHeader from './TicketHeader';
 import Chips from '../Chip/Chips';
 import styles from './styles.module.scss';
-import { compareArrays, generateRandomArrNum } from '../../utils/helpers';
+import { generateRandomArrNum, validateWin } from '../../utils/helpers';
 import { GameState, WinningCondition } from '../../utils/types';
 
 interface TicketGameContentProps {
@@ -48,36 +48,28 @@ function TicketGameContent(props: TicketGameContentProps) {
 
     const isFieldsValid = (firstField.length === firstFieldRequire) && (secondField.length === secondFieldRequire);
 
-    const selectRandom = () => {
+    const selectRandom = useCallback(() => {
         // Получаем случайные выбранные значения для полей
         const firstFieldNumbers = generateRandomArrNum(firstFieldRequire, firstFieldCount);
         const secondFieldNumbers = generateRandomArrNum(secondFieldRequire, secondFieldCount);
 
         setFirstField(firstFieldNumbers);
         setSecondField(secondFieldNumbers);
-    };
+    }, [firstFieldCount, firstFieldRequire, secondFieldCount, secondFieldRequire, setFirstField, setSecondField]);
 
-    const validateWin = () => {
-        // Получаем количество совпавших выбранных значений с выигрышными
-        const firstFieldMatch = compareArrays(firstField, firstFieldWin);
-        const secondFieldMatch = compareArrays(secondField, secondFieldWin);
+    const onShowResultClick = useCallback(() => {
+        const result = validateWin(
+            firstField,
+            secondField,
+            firstFieldWin,
+            secondFieldWin,
+            firstWinningCondition,
+            secondWinningCondition,
+        );
 
-        // Проверяем условия выигрыша
-        if (firstFieldMatch >= firstWinningCondition.firstField) {
-            setGameState('win');
-        }
-
-        if ((firstFieldMatch >= secondWinningCondition.firstField) && secondFieldMatch) {
-            setGameState('win');
-        }
-
-        setGameState('lose');
-    }
-
-    const onShowResultClick = async () => {
-        validateWin();
-        await sendResult();
-    };
+        setGameState(result ? 'win' : 'lose');
+        sendResult();
+    }, [firstField, firstFieldWin, firstWinningCondition, secondField, secondFieldWin, secondWinningCondition, sendResult, setGameState]);
 
     return (
         <>
@@ -89,7 +81,7 @@ function TicketGameContent(props: TicketGameContentProps) {
                     color="black"
                     name="magic"
                     className={styles.ticket_magic_icon}
-                    onClick={() => selectRandom()}
+                    onClick={selectRandom}
                 />
             </div>
             <TicketHeader
