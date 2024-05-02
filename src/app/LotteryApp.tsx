@@ -29,7 +29,6 @@ function LotteryApp() {
     loading: false,
     message: '',
   });
-
   const [firstField, setFirstField] = useState<Field>([]);
   const [secondField, setSecondField] = useState<Field>([]);
   const [firstFieldWin, setFirstFieldWin] = useState(() => generateRandomArrNum(FIRST_FIELD_CHIP_REQUIRE, FIRST_FIELD_CHIP_COUNT));

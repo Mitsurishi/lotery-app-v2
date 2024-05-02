@@ -26,7 +26,7 @@ function TicketResultContent(props: TicketResultContentProps) {
                     basic
                     icon="redo"
                     content="Попробовать снова"
-                    onClick={() => restartGame()}
+                    onClick={restartGame}
                 />
             </div>
         </div>
